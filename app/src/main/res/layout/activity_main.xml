@@ -14,13 +14,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save &quot;123.txt&quot; with content &quot;123&quot;"
-        android:id="@+id/button" />
+        android:id="@+id/button1"
+        android:layout_marginBottom="24dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"
-        android:text="Save &quot;456.txt&quot; with content &quot;456&quot;" />
+        android:text="Save &quot;456.txt&quot; with content &quot;456&quot;"
+        android:layout_marginBottom="24dp"/>
 
     <Button
         android:layout_width="wrap_content"
