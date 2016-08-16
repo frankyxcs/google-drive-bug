@@ -1,4 +1,4 @@
-package gui.jstock.yccheok.org.demo;
+package org.yccheok.jstock.gui;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.widget.Button;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.yccheok.jstock.gui.GoogleApiClientFragment;
+
+import gui.jstock.yccheok.org.gui.R;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClientFragment.ConnectionCallbacks {
 

@@ -1,4 +1,4 @@
-package gui.jstock.yccheok.org.demo;
+package org.yccheok.jstock.gui;
 
 import android.app.Activity;
 import android.content.Intent;
