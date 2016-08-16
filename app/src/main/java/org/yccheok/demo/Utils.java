@@ -208,9 +208,7 @@ public class Utils {
                         .setMimeType("text/plain").build();
 
                 DriveFolder driveFolder = Drive.DriveApi.getAppFolder(googleApiClient);
-
-                Log.i("CHEOK", "driveFolder = " + driveFolder);
-
+                
                 DriveFolder.DriveFileResult driveFileResult = driveFolder.createFile(googleApiClient, metadataChangeSet, driveContents).await();
 
                 if (driveFileResult == null) {

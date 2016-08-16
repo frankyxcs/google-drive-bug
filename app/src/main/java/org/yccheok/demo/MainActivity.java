@@ -18,11 +18,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(org.yccheok.jstock.gui.R.layout.activity_main);
+        setContentView(org.yccheok.demo.R.layout.activity_main);
 
-        Button button1 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button1);
-        Button button2 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button2);
-        Button button3 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button3);
+        Button button1 = (Button)this.findViewById(org.yccheok.demo.R.id.button1);
+        Button button2 = (Button)this.findViewById(org.yccheok.demo.R.id.button2);
+        Button button3 = (Button)this.findViewById(org.yccheok.demo.R.id.button3);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
