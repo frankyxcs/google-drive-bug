@@ -112,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
         } else {
             assert(action == ACTION_LOAD_LATEST_FILE);
 
-            //LoadLatestFileTaskFragment loadLatestFileTaskFragment = LoadLatestFileTaskFragment.newInstance(googleApiClient);
-            //FragmentManager fm = getSupportFragmentManager();
-            //fm.beginTransaction().add(loadLatestFileTaskFragment, LOAD_LATEST_FILE_TASK_FRAGMENT).commitAllowingStateLoss();
+            LoadLatestFileTaskFragment loadLatestFileTaskFragment = LoadLatestFileTaskFragment.newInstance(googleApiClient);
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().add(loadLatestFileTaskFragment, LOAD_LATEST_FILE_TASK_FRAGMENT).commitAllowingStateLoss();
         }
 
         FragmentManager fm = this.getSupportFragmentManager();
