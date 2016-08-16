@@ -10,14 +10,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 public class SaveFile456Task extends AsyncTask<Void, String, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
-        for (int i = 0; i < 10; i++) {
-            this.publishProgress("--> " + i);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (Utils.saveToGoogleDrive(googleApiClient, "456")) {
+            Utils.showLongToast("Save 456 success :)");
+        } else {
+            Utils.showLongToast("Save 456 fail :(");
         }
+
         return true;
     }
 

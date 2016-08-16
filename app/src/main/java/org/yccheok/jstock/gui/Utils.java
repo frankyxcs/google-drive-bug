@@ -1,6 +1,9 @@
 package org.yccheok.jstock.gui;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -20,6 +23,7 @@ import com.google.android.gms.drive.query.SearchableField;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,6 +36,19 @@ import java.util.regex.Pattern;
  * Created by yccheok on 16/8/2016.
  */
 public class Utils {
+    public static class CloudFile {
+        public final java.io.File file;
+        public final long checksum;
+        private CloudFile(java.io.File file, long checksum) {
+            this.file = file;
+            this.checksum = checksum;
+        }
+
+        public static CloudFile newInstance(java.io.File file, long checksum) {
+            return new CloudFile(file, checksum);
+        }
+    }
+
     private static class GoogleCloudFile {
         private final MetadataBuffer metadataBuffer;
         public final Metadata metadata;
@@ -137,7 +154,6 @@ public class Utils {
         GoogleCloudFile googleCloudFile = searchFromGoogleDrive(googleApiClient);
 
         try {
-            final long date = new Date().getTime();
             // 123.TXT or 456.TXT
             final String title = content + ".TXT";
 
@@ -195,6 +211,9 @@ public class Utils {
                         .setMimeType("text/plain").build();
 
                 DriveFolder driveFolder = Drive.DriveApi.getAppFolder(googleApiClient);
+
+                Log.i("CHEOK", "driveFolder = " + driveFolder);
+
                 DriveFolder.DriveFileResult driveFileResult = driveFolder.createFile(googleApiClient, metadataChangeSet, driveContents).await();
 
                 if (driveFileResult == null) {
@@ -258,6 +277,96 @@ public class Utils {
             } catch (IOException ex) {
                 Log.e(TAG, "", ex);
             }
+        }
+    }
+
+    public static void showLongToast(final String message) {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            // UI thread.
+            final Toast toast = Toast.makeText(MyApplication.instance(), message, Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            // non-UI thread.
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                public void run() {
+                    final Toast toast = Toast.makeText(MyApplication.instance(), message, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+        }
+
+    }
+
+    public static CloudFile loadFromGoogleDrive(GoogleApiClient googleApiClient) {
+        final java.io.File directory = MyApplication.instance().getExternalCacheDir();
+        if (directory == null) {
+            org.yccheok.jstock.gui.Utils.showLongToast("unable_to_access_external_storage");
+            return null;
+        }
+
+        Status status = Drive.DriveApi.requestSync(googleApiClient).await();
+        if (!status.isSuccess()) {
+            // Sync request rate limit exceeded.
+            //
+            //h.handleStatus(status);
+            //return null;
+        }
+
+        GoogleCloudFile googleCloudFile = searchFromGoogleDrive(googleApiClient);
+
+        if (googleCloudFile == null) {
+            return null;
+        }
+
+        try {
+            DriveFile driveFile = googleCloudFile.metadata.getDriveId().asDriveFile();
+            DriveApi.DriveContentsResult driveContentsResult = driveFile.open(googleApiClient, DriveFile.MODE_READ_ONLY, null).await();
+
+            if (driveContentsResult == null) {
+                return null;
+            }
+
+            status = driveContentsResult.getStatus();
+            if (!status.isSuccess()) {
+                return null;
+            }
+
+            final long checksum = googleCloudFile.checksum;
+
+            final DriveContents driveContents = driveContentsResult.getDriveContents();
+
+            InputStream inputStream = null;
+            java.io.File outputFile = null;
+            OutputStream outputStream = null;
+
+            try {
+                inputStream = driveContents.getInputStream();
+                outputFile = java.io.File.createTempFile("TEMP", ".TXT", directory);
+                outputFile.deleteOnExit();
+                outputStream = new FileOutputStream(outputFile);
+
+                int read = 0;
+                byte[] bytes = new byte[1024];
+
+                while ((read = inputStream.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+            } catch (IOException ex) {
+                Log.e(TAG, "", ex);
+            } finally {
+                close(outputStream);
+                close(inputStream);
+                driveContents.discard(googleApiClient);
+            }
+
+            if (outputFile == null) {
+                return null;
+            }
+
+            return CloudFile.newInstance(outputFile, checksum);
+        } finally {
+            googleCloudFile.metadataBuffer.release();
         }
     }
 
