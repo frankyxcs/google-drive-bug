@@ -1,4 +1,4 @@
-package org.yccheok.jstock.gui;
+package org.yccheok.demo;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
@@ -18,11 +18,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(org.yccheok.jstock.gui.R.layout.activity_main);
 
-        Button button1 = (Button)this.findViewById(R.id.button1);
-        Button button2 = (Button)this.findViewById(R.id.button2);
-        Button button3 = (Button)this.findViewById(R.id.button3);
+        Button button1 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button1);
+        Button button2 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button2);
+        Button button3 = (Button)this.findViewById(org.yccheok.jstock.gui.R.id.button3);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override

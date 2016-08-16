@@ -1,4 +1,4 @@
-package org.yccheok.jstock.gui;
+package org.yccheok.demo;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,7 +10,7 @@ import android.support.v4.app.DialogFragment;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class LoadLatestFileTaskFragment extends DialogFragment {
+public class SaveFile456TaskFragment extends DialogFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,10 +20,10 @@ public class LoadLatestFileTaskFragment extends DialogFragment {
         // configuration.
         setRetainInstance(true);
 
-        loadLatestFileTask = new LoadLatestFileTask(this, googleApiClient);
+        saveFile456Task = new SaveFile456Task(this, googleApiClient);
         // Should we use executeOnExecutor? As if previous loadFromCloudTask was stuck, the new
         // upcoming loadFromCloudTask won't run by using execute.
-        loadLatestFileTask.execute();
+        saveFile456Task.execute();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LoadLatestFileTaskFragment extends DialogFragment {
 
         // This is a little hacky, but we will see if the task has finished while we weren't
         // in this activity, and then we can dismiss ourselves.
-        if (loadLatestFileTask == null) {
+        if (saveFile456Task == null) {
             dismiss();
         }
     }
@@ -73,8 +73,8 @@ public class LoadLatestFileTaskFragment extends DialogFragment {
         // If false, it guarantees a result is never returned (onPostExecute() isn't called)
         // but you have to repeatedly call isCancelled() in your doInBackground()
         // function to check if it should exit. For some tasks that might not be feasible.
-        if (loadLatestFileTask != null) {
-            loadLatestFileTask.cancel(true);
+        if (saveFile456Task != null) {
+            saveFile456Task.cancel(true);
         }
 
         if (googleApiClient != null) {
@@ -111,23 +111,23 @@ public class LoadLatestFileTaskFragment extends DialogFragment {
 
         // If we aren't resumed, setting the task to null will allow us to dismiss
         // ourselves in onResume().
-        loadLatestFileTask = null;
+        saveFile456Task = null;
     }
 
-    public static LoadLatestFileTaskFragment newInstance(GoogleApiClient googleApiClient) {
-        LoadLatestFileTaskFragment laveFile123TaskFragment = new LoadLatestFileTaskFragment();
+    public static SaveFile456TaskFragment newInstance(GoogleApiClient googleApiClient) {
+        SaveFile456TaskFragment saveFile456TaskFragment = new SaveFile456TaskFragment();
 
         // Seems dangerous in first place as we don't assign it to bundle. But it is OK as our
         // context due to setRetainInstance(true)
-        laveFile123TaskFragment.googleApiClient = googleApiClient;
+        saveFile456TaskFragment.googleApiClient = googleApiClient;
 
-        return laveFile123TaskFragment;
+        return saveFile456TaskFragment;
     }
 
     private GoogleApiClient googleApiClient;
-    private LoadLatestFileTask loadLatestFileTask;
+    private SaveFile456Task saveFile456Task;
     private ProgressDialog progressDialog;
     private String progressMessage = "";
 
-    private static final String TAG = "SaveFile123TaskFragment";
+    private static final String TAG = "SaveFile456TaskFragment";
 }

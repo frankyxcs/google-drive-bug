@@ -1,4 +1,4 @@
-package org.yccheok.jstock.gui;
+package org.yccheok.demo;
 
 import android.os.AsyncTask;
 

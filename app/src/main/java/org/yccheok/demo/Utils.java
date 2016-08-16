@@ -1,4 +1,4 @@
-package org.yccheok.jstock.gui;
+package org.yccheok.demo;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -21,14 +21,11 @@ import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -301,7 +298,7 @@ public class Utils {
     public static CloudFile loadFromGoogleDrive(GoogleApiClient googleApiClient) {
         final java.io.File directory = MyApplication.instance().getExternalCacheDir();
         if (directory == null) {
-            org.yccheok.jstock.gui.Utils.showLongToast("unable_to_access_external_storage");
+            Utils.showLongToast("unable_to_access_external_storage");
             return null;
         }
 

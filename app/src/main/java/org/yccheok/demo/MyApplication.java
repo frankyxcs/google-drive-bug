@@ -1,6 +1,5 @@
-package org.yccheok.jstock.gui;
+package org.yccheok.demo;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 
 /**
