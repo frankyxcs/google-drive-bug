@@ -188,7 +188,6 @@ public class Utils {
             }
 
             OutputStream outputStream = driveContents.getOutputStream();
-            InputStream inputStream = null;
 
             try {
                 outputStream.write(content.getBytes(Charset.forName("UTF-8")));
@@ -197,7 +196,6 @@ public class Utils {
                 return false;
             } finally {
                 close(outputStream);
-                close(inputStream);
             }
 
             if (googleCloudFile == null) {
@@ -238,6 +236,8 @@ public class Utils {
                 Log.e(TAG, "", e);
                 return false;
             }
+
+            close(outputStream);
 
             if (!status.isSuccess()) {
                 return false;
