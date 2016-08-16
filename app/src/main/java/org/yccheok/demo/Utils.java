@@ -237,8 +237,6 @@ public class Utils {
                 return false;
             }
 
-            close(outputStream);
-
             if (!status.isSuccess()) {
                 return false;
             }
