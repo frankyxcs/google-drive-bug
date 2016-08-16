@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
                         GoogleApiClientFragment googleApiClientFragment;
 
                         if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_123) {
-                            android.util.Log.i("CHEOK", "accountName = " + accountName);
                             googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_123);
                         } else if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_456) {
                             googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_456);
@@ -106,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
             fm.beginTransaction().add(saveFile123TaskFragment, SAVE_FILE_123_TASK_FRAGMENT).commitAllowingStateLoss();
 
         } else if (action == ACTION_SAVE_FILE_456) {
-            //SaveFile456TaskFragment saveFile456TaskFragment = SaveFile456TaskFragment.newInstance(googleApiClient);
-            //FragmentManager fm = getSupportFragmentManager();
-            //fm.beginTransaction().add(saveFile456TaskFragment, SAVE_FILE_456_TASK_FRAGMENT).commitAllowingStateLoss();
+            SaveFile456TaskFragment saveFile456TaskFragment = SaveFile456TaskFragment.newInstance(googleApiClient);
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().add(saveFile456TaskFragment, SAVE_FILE_456_TASK_FRAGMENT).commitAllowingStateLoss();
 
         } else {
             assert(action == ACTION_LOAD_LATEST_FILE);
