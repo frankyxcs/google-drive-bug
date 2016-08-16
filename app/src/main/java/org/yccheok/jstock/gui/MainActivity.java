@@ -13,10 +13,6 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.yccheok.jstock.gui.GoogleApiClientFragment;
-
-import gui.jstock.yccheok.org.gui.R;
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClientFragment.ConnectionCallbacks {
 
     @Override
@@ -81,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
                         GoogleApiClientFragment googleApiClientFragment;
 
                         if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_123) {
+                            android.util.Log.i("CHEOK", "accountName = " + accountName);
                             googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_123);
                         } else if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_456) {
                             googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_456);
@@ -104,9 +101,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
         // It is our responsible to call googleApiClient.disconnect, not GoogleApiClientFragment.
 
         if (action == ACTION_SAVE_FILE_123) {
+            SaveFile123TaskFragment saveFile123TaskFragment = SaveFile123TaskFragment.newInstance(googleApiClient);
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().add(saveFile123TaskFragment, SAVE_FILE_123_TASK_FRAGMENT).commitAllowingStateLoss();
+
         } else if (action == ACTION_SAVE_FILE_456) {
+            //SaveFile456TaskFragment saveFile456TaskFragment = SaveFile456TaskFragment.newInstance(googleApiClient);
+            //FragmentManager fm = getSupportFragmentManager();
+            //fm.beginTransaction().add(saveFile456TaskFragment, SAVE_FILE_456_TASK_FRAGMENT).commitAllowingStateLoss();
+
         } else {
-            assert(action == ACTION_SAVE_FILE_456);
+            assert(action == ACTION_LOAD_LATEST_FILE);
+
+            //LoadLatestFileTaskFragment loadLatestFileTaskFragment = LoadLatestFileTaskFragment.newInstance(googleApiClient);
+            //FragmentManager fm = getSupportFragmentManager();
+            //fm.beginTransaction().add(loadLatestFileTaskFragment, LOAD_LATEST_FILE_TASK_FRAGMENT).commitAllowingStateLoss();
         }
 
         FragmentManager fm = this.getSupportFragmentManager();
@@ -136,4 +145,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClientFr
     public static final int REQUEST_GOOGLE_API_CLIENT_CONNECT = 6;
 
     private static final String GOOGLE_API_CLIENT_FRAGMENT = "GOOGLE_API_CLIENT_FRAGMENT";
+
+    private static final String SAVE_FILE_123_TASK_FRAGMENT = "SAVE_FILE_123_TASK_FRAGMENT";
+    private static final String SAVE_FILE_456_TASK_FRAGMENT = "SAVE_FILE_456_TASK_FRAGMENT";
+    private static final String LOAD_LATEST_FILE_TASK_FRAGMENT = "LOAD_LATEST_FILE_TASK_FRAGMENT";
 }
