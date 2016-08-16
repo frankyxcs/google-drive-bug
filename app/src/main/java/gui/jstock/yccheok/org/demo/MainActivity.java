@@ -2,16 +2,18 @@ package gui.jstock.yccheok.org.demo;
 
 import android.accounts.AccountManager;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.google.android.gms.common.api.GoogleApiClient;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClientFragment.ConnectionCallbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +74,62 @@ public class MainActivity extends AppCompatActivity {
                     String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     String accountType = data.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE);
                     if (accountName != null && accountType != null) {
-                        final Toast toast = Toast.makeText(this, accountName, Toast.LENGTH_LONG);
-                        toast.show();
+                        GoogleApiClientFragment googleApiClientFragment;
+
+                        if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_123) {
+                            googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_123);
+                        } else if (requestCode == REQUEST_ACCOUNT_PICKER_SAVE_FILE_456) {
+                            googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_SAVE_FILE_456);
+                        } else {
+                            googleApiClientFragment = GoogleApiClientFragment.newInstance(accountName, ACTION_LOAD_LATEST_FILE);
+                        }
+
+                        FragmentManager fm = this.getSupportFragmentManager();
+                        Fragment oldFragment = fm.findFragmentByTag(GOOGLE_API_CLIENT_FRAGMENT);
+                        if (oldFragment != null) {
+                            fm.beginTransaction().remove(oldFragment).commitAllowingStateLoss();
+                        }
+                        fm.beginTransaction().add(googleApiClientFragment, GOOGLE_API_CLIENT_FRAGMENT).commitAllowingStateLoss();
                     }
                 }
+        }
+    }
+
+    @Override
+    public void onConnected(GoogleApiClient googleApiClient, int action) {
+        // It is our responsible to call googleApiClient.disconnect, not GoogleApiClientFragment.
+
+        if (action == ACTION_SAVE_FILE_123) {
+        } else if (action == ACTION_SAVE_FILE_456) {
+        } else {
+            assert(action == ACTION_SAVE_FILE_456);
+        }
+
+        FragmentManager fm = this.getSupportFragmentManager();
+        Fragment oldFragment = fm.findFragmentByTag(GOOGLE_API_CLIENT_FRAGMENT);
+        if (oldFragment != null) {
+            fm.beginTransaction().remove(oldFragment).commitAllowingStateLoss();
+        }
+    }
+
+    @Override
+    public void onCancel(int action) {
+        FragmentManager fm = this.getSupportFragmentManager();
+        Fragment oldFragment = fm.findFragmentByTag(GOOGLE_API_CLIENT_FRAGMENT);
+        if (oldFragment != null) {
+            fm.beginTransaction().remove(oldFragment).commitAllowingStateLoss();
         }
     }
 
     private static final int REQUEST_ACCOUNT_PICKER_SAVE_FILE_123 = 0;
     private static final int REQUEST_ACCOUNT_PICKER_SAVE_FILE_456 = 1;
     private static final int REQUEST_ACCOUNT_PICKER_LOAD_LATEST_FILE = 2;
+
+    public static final int ACTION_SAVE_FILE_123 = 3;
+    public static final int ACTION_SAVE_FILE_456 = 4;
+    public static final int ACTION_LOAD_LATEST_FILE = 5;
+
+    public static final int REQUEST_GOOGLE_API_CLIENT_CONNECT = 6;
+
+    private static final String GOOGLE_API_CLIENT_FRAGMENT = "GOOGLE_API_CLIENT_FRAGMENT";
 }
