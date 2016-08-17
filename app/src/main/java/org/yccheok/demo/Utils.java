@@ -226,22 +226,21 @@ public class Utils {
                 if (!status.isSuccess()) {
                     return false;
                 }
+
+                try {
+                    status = driveContents.commit(googleApiClient, null).await();
+                } catch (java.lang.IllegalStateException e) {
+                    // java.lang.IllegalStateException: DriveContents already closed.
+                    Log.e(TAG, "", e);
+                    return false;
+                }
+
+                if (!status.isSuccess()) {
+                    return false;
+                }
             }
 
-            Status status;
-            try {
-                status = driveContents.commit(googleApiClient, null).await();
-            } catch (java.lang.IllegalStateException e) {
-                // java.lang.IllegalStateException: DriveContents already closed.
-                Log.e(TAG, "", e);
-                return false;
-            }
-
-            if (!status.isSuccess()) {
-                return false;
-            }
-
-            status = Drive.DriveApi.requestSync(googleApiClient).await();
+            Status status = Drive.DriveApi.requestSync(googleApiClient).await();
             if (!status.isSuccess()) {
                 // Sync request rate limit exceeded.
                 //
@@ -364,5 +363,5 @@ public class Utils {
     }
 
     private static final String TAG = "Utils";
-    private static final Pattern googleDocTitlePattern = Pattern.compile("\\.TXT", Pattern.CASE_INSENSITIVE);
+    private static final Pattern googleDocTitlePattern = Pattern.compile("([0-9]+)\\.TXT", Pattern.CASE_INSENSITIVE);
 }
